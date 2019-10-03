@@ -1,0 +1,128 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.49495697021484,
+          24.16899469804957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 100
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5086898803711,
+          24.145813744514424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 200
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.4602813720703,
+          24.14863327434619
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 100
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.49049377441405,
+          24.133595063223247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 200
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.5042266845703,
+          24.142680860639725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 100
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.56842803955078,
+          24.251346984566855
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 300
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.6130599975586,
+          24.256981315882488
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "price": 200
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.60859680175781,
+          24.172753375152144
+        ]
+      }
+    }
+  ]
+}
