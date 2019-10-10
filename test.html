@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Land Value Assement</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Land Value Assement</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="https://www.coa.gov.tw/">COA Website</a></li>
+      <li><a href="https://lvr.land.moi.gov.tw/homePage.action">Actual Selling Price </a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="embed-container">
+<iframe width="500" height="400" frameborder="0"  marginheight="0" marginwidth="0" title="Land value map" src="https://meng-chin.github.io/COA-land-value/">
+</iframe>
+</div>
+<style>
+    .navbar {
+	margin:0 !important;
+	padding: 0px !important;
+    }
+ 	.embed-container {
+		position: relative;
+		padding-bottom: 0;
+		height: 0; 
+		width: 100%;
+	}
+	.embed-container iframe, .embed-container object, .embed-container iframe{
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 1000px;
+	}
+	small{
+		position: absolute;
+		z-index: 40;
+		bottom: 0;
+		margin-bottom: 15px;
+	}
+</style>
+</body>
+</html>
