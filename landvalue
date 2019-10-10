@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>COA TEST</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#menu1 {
+background: #F5FFFA;
+position: absolute;
+z-index: 1;
+top: 150px;
+right: 10px;
+border-radius: 3px;
+width: 120px;
+font-family: 'Open Sans', sans-serif;
+}
+
+#menu {
+background: #fff;
+position: absolute;
+z-index: 1;
+top: 50px;
+right: 10px;
+border-radius: 3px;
+width: 120px;
+border: 1px solid rgba(0,0,0,0.4);
+font-family: 'Open Sans', sans-serif;
+}
+.row{
+  display: table-row;
+}
+label{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#menu a {
+font-size: 13px;
+color: #404040;
+display: block;
+margin: 0;
+padding: 0;
+padding: 10px;
+text-decoration: none;
+border-bottom: 1px solid rgba(0,0,0,0.25);
+text-align: center;
+}
+ 
+#menu a:last-child {
+border: none;
+}
+ 
+#menu a:hover {
+background-color: #f8f8f8;
+color: #404040;
+}
+ 
+#menu a.active {
+background-color: #3887be;
+color: #ffffff;
+}
+ 
+#menu a.active:hover {
+background: #3074a4;
+}
+
+
+#map { position:absolute; top:0; bottom:0; width:100%; }
+ .mapboxgl-popup {
+overflow-y: scroll;
+max-width: 200px;
+max-height: 400px;
+font: 12px/20px 'Open Sans', sans-serif;
+border-radius: 5px;
+}
+</style>
+</head>
+<body>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+
+<div id='map'></div>
+<nav id="menu"></nav>
+<div id='menu1'>
+    <input id='streets-v11'type='radio' name='rtoggle' value='streets' checked='checked'>
+        <label for='streets'>streets</label>
+    <input id='light-v10'type='radio' name='rtoggle' value='light'>
+        <label for='light'>light</label>
+    <input id='dark-v10' type='radio' name='rtoggle' value='dark'>
+        <label for='dark'>dark</label>
+    <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors'>
+        <label for='outdoors'>outdoors</label>
+    <input id='satellite-v9' type='radio' name='rtoggle' value='satellite'>
+        <label for='satellite'>satellite</label>
+</div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibW9ua2V5MDUwMyIsImEiOiJjajMzMnBqMGswMDJjMzNvOXd4NmtkNTR6In0.k9QqpyQkUxGk-X-OFPvMRg';
+var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+    center: [120.9, 24.2], // starting position [lng, lat]
+    zoom: 6 // starting zoom
+});
+
+map.on('style.load',
+    () => {
+        map.addSource("boundaries",
+        {
+            type: "geojson",
+            data: "https://meng-chin.github.io/COA-land-value/ChiayiTOWN.geojson"
+            });
+            
+        map.addLayer({
+            id: 'township',
+            type: 'fill',
+            source: 'boundaries',
+            paint: {
+                'fill-color': "#888888",
+                'fill-opacity': 0.4
+            }
+        });
+        map.addSource("landlocation",
+            {
+                type: "geojson",
+                data: "https://meng-chin.github.io/COA-land-value/convertcsv.geojson",
+                cluster: true, // Enable clustering
+                clusterRadius: 25, // Radius of each cluster when clustering points
+                clusterMaxZoom: 10 // Max zoom to cluster points on
+            });
+        map.addLayer({
+            id: 'clusters',
+            type: 'circle',
+            source: 'landlocation',
+            paint: {
+                'circle-color': {
+                    property: 'point_count',
+                    type: 'interval',
+                    stops: [
+                        [0, '#48C9B0 '],
+                        [100, '#5499C7 '],
+                        [1000, '#2874A6 '],
+                   
+                    ]
+                },
+                'circle-radius': {
+                    property: 'point_count',
+                    type: 'interval',
+                    stops: [
+                        [0, 20],
+                        [100, 30],
+                        [1000, 40]
+                    ]
+                }
+            }
+        });
+        map.addLayer({
+            id: 'cluster-count',
+            type: 'symbol',
+            source: 'landlocation',
+            filter: ['has', 'point_count'],
+            layout: {
+                'text-field': '{point_count}',
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12,
+            }
+        });
+        map.addLayer({
+            id: 'uncluster',
+            type: 'circle',
+            source: 'landlocation',
+            filter: ['!has', 'point_count'],
+            paint: {
+                'circle-color': '#D4E157  ',
+                'circle-radius': 6,
+                'circle-stroke-width': 1,
+                'circle-stroke-color': '#FCF9F9 '
+            }
+        });
+        map.on('click', 'uncluster', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var townname = e.features[0].properties.town;
+            var address = e.features[0].properties.address;
+            var area = e.features[0].properties.land_area;
+            var type = e.features[0].properties.type;
+            var noncitytype = e.features[0].properties.noncity_type;
+            var noncity = e.features[0].properties.noncity;
+            var transdate = e.features[0].properties.trans_date;
+            var transnum = e.features[0].properties.trans_num;
+            var buildp = e.features[0].properties.build_p;
+            var buildorg = e.features[0].properties.build_org;
+            var totalprice = e.features[0].properties.total_price;
+            var unitprice= e.features[0].properties.unit_price;
+            
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+        
+            new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML("<b>Townname:</b>"+ townname +"<br />"+"<b>Address:</b>"+ address+"<br />"+"<b>Area Size:</b>"+ area +"<br />"+"<b>Type:</b>"+ type +"<br />"+"<b>TypeID of Noncity areas:</b>"+ noncitytype +"<br />"+"<b>Noncity Areas:</b>"+ noncity +"<br />"+"<b>Transfer Time:</b>"+ transdate+"<br />"+"<b>Transfer Ammounts:</b>"+ transnum +"<br />"+"<b>Private Buildings:</b>"+ buildp +"<br />"+"<b>Official Buildings:</b>"+ buildorg +"<br />"+"<b>Total Price:</b>"+ totalprice +"<br />"+"<b>Unit Price:</b>"+ unitprice)
+            .addTo(map);
+         
+        
+        });
+        
+        // Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', 'uncluster', function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+        
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'uncluster', function () {
+            map.getCanvas().style.cursor = '';
+        });
+        
+        var layerList = document.getElementById('menu1');
+        var inputs = layerList.getElementsByTagName('input');
+    
+        function switchLayer(layer) {
+            var layerId = layer.target.id;
+            map.setStyle('mapbox://styles/mapbox/' + layerId);
+            }
+        
+            for (var i = 0; i < inputs.length; i++) {
+            inputs[i].onclick = switchLayer;
+                }     
+    });
+//whatever layers you want to toggle go in to this function
+toggleLayer(['clusters', 'uncluster','cluster-count'], 'Land');
+toggleLayer(['township'], 'Boundaries');
+
+function toggleLayer(ids, name) {
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = name;
+
+    link.onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        for (layers in ids){
+            var visibility = map.getLayoutProperty(ids[layers], 'visibility');
+            if (visibility === 'visible') {
+                map.setLayoutProperty(ids[layers], 'visibility', 'none');
+                this.className = '';
+            } else {
+                this.className = 'active';
+                map.setLayoutProperty(ids[layers], 'visibility', 'visible');
+            }
+         }
+
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+    
+    map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+    
+}));
+</script>
+ 
+</body>
+</html>
+    
